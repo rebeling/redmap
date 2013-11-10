@@ -11,3 +11,15 @@ class ConfigData:
         data = {x: config.get('Credentials',x) for x in this_credentials}
         for k, v in data.items():
             setattr(self, k, v)
+
+
+def t_(input):
+    # translate or map input to
+    translate = {
+        "Backlog": "backlog",
+        "Neu": "new"
+    }
+    if input in translate:
+        return translate[input]
+    else:
+        return input
