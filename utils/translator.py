@@ -9,6 +9,6 @@ def t_(input):
         "Neu": "new"
     }
     if input in translate:
-        return translate[input]
+        return translate[input].encode('utf-8')
     else:
-        return input
+        return input.encode('utf-8')
