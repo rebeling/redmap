@@ -58,6 +58,20 @@ def restructure_data(data):
             for item in items:
                 new_items[key].append(restructure_item(key, item))
 
+            # in order to sort the stories and put the backlogs at the end
+            # we prefix 'sprint ' to 'backlog' and remove it after the sorting
+            stories = new_items[key]
+            for story in stories:
+                if 'backlog' in story['fixed_version']:
+                    story['fixed_version'] = 'sprint ' + story['fixed_version']
+            stories = sorted(stories, key=lambda k: k['fixed_version'])
+            for story in stories:
+                if 'backlog' in story['fixed_version']:
+                    story['fixed_version'] = story['fixed_version'][7:]
+
+            new_items[key] = stories
+
+
         elif key.encode('utf-8')  == "Task":
             alltasks = {}
             for item in items:
@@ -67,10 +81,10 @@ def restructure_data(data):
                 alltasks[parentid] = tasks
             new_items[key] = alltasks
 
-        elif key.encode('utf-8')  == "Unterstützung":
-            new_items[key] = []
-            for item in items:
-                new_items[key].append(restructure_item(key, item))
+        # elif key.encode('utf-8')  == "Unterstützung":
+        #     new_items[key] = []
+        #     for item in items:
+        #         new_items[key].append(restructure_item(key, item))
 
     return new_items
 
