@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import ConfigParser
+# import logging as log
 
 
 class ConfigData:

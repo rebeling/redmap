@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
 from utils.translator import t_
+# import logging as log
 
 
 def restructure_data(data):
 
     # total_count: data['total_count']
-
     restructure = {}
     # print "\n".join(data['issues'][0].keys())
     for issue in data['issues']:

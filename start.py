@@ -3,6 +3,8 @@
 from utils.config_parser import ConfigData
 from redmine.redreq import get_project_data
 from utils.transformator import restructure_data
+import logging as log
+import logging.config
 import json
 
 
@@ -14,6 +16,9 @@ def main():
         todo:
         4. store data somehow ...pouchdb or redis would be awesome!
     """
+    logging.config.fileConfig('logging.cfg')
+    log.info('Started')
+
     red = ConfigData()
 
     success, data_or_msg = get_project_data(red)
@@ -23,9 +28,11 @@ def main():
         final_data = json.dumps(restructured, indent=4, sort_keys=True)
         with open("data/%s_data.json" % red.project, 'w') as f:
             f.write(final_data)
-
+        log.info('json file craeted')
     else:
-        print data_or_msg
+        log.info(data_or_msg)
+
+    log.info('Finished')
 
 
 if __name__ == '__main__':

@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import requests
+# import logging as log
 
 
 def get_project_data(red):
