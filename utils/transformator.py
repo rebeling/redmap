@@ -81,10 +81,10 @@ def restructure_data(data):
                 alltasks[parentid] = tasks
             new_items[key] = alltasks
 
-        # elif key.encode('utf-8')  == "Unterstützung":
-        #     new_items[key] = []
-        #     for item in items:
-        #         new_items[key].append(restructure_item(key, item))
+        elif key.encode('utf-8')  == "Unterstützung":
+            new_items[key] = []
+            for item in items:
+                new_items[key].append(restructure_item(key, item))
 
     return new_items
 
