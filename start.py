@@ -16,7 +16,7 @@ def main():
         todo:
         4. store data somehow ...pouchdb or redis would be awesome!
     """
-    logging.config.fileConfig('logging.cfg')
+    logging.config.fileConfig('cfg/logging.cfg')
     log.info('Started')
 
     red = ConfigData()

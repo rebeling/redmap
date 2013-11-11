@@ -35,6 +35,6 @@ nosetests.xml
 .project
 .pydevproject
 
-secret.cfg
+cfg/secret.cfg
 log
 data
