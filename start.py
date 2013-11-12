@@ -3,6 +3,7 @@
 from utils.config_parser import ConfigData
 from redmine.redreq import get_project_data
 from utils.transformator import restructure_data
+from utils import write_content_to
 import logging as log
 import logging.config
 import json
@@ -26,8 +27,7 @@ def main():
     if success:
         restructured = restructure_data(data_or_msg)
         final_data = json.dumps(restructured, indent=4, sort_keys=True)
-        with open("data/%s_data.json" % red.project, 'w') as f:
-            f.write(final_data)
+        write_content_to(red.filepath, final_data)
         log.info('json file craeted')
     else:
         log.info(data_or_msg)
