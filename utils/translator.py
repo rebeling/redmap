@@ -6,8 +6,10 @@
 def t_(input):
     # translate or map input to
     translate = {
-        "Backlog": "backlog",
-        "Neu": "new"
+        "backlog": "backlog",
+        "neu": "new",
+        "erledigt": "done",
+        "abgewiesen": "refused"
     }
     if input in translate:
         return translate[input].encode('utf-8')
