@@ -14,14 +14,14 @@ def main():
         1. get/set all your connection data for redmine
         2. connect to your project and get the projects issues.json
         3. restructure the data in transformator
-        todo:
-        4. store data somehow ...pouchdb or redis would be awesome!
+        4. save data as json
+            todo:
+            store data somehow ...pouchdb or redis would be awesome!
     """
     logging.config.fileConfig('cfg/logging.cfg')
     log.info('Started')
 
     red = ConfigData()
-
     success, data_or_msg = get_project_data(red)
 
     if success:
