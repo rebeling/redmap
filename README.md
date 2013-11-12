@@ -6,7 +6,7 @@ access the redmine data of a project
 
 Configuration
 ----------------
-The *secret.cfg* is ignored and contains your connection data, like this:
+The *cfg/secret.cfg* is ignored and contains your connection data, like this:
 
     [Credentials]
     redmine_url:x
