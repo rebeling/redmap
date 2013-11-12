@@ -8,7 +8,5 @@ class ConfigData:
     def __init__(self):
         config = ConfigParser.ConfigParser()
         config.read("cfg/secret.cfg")
-        this_credentials = ['key', 'user', 'pw', 'redmine_url', 'project']
-        data = {x: config.get('Credentials',x) for x in this_credentials}
-        for k, v in data.items():
+        for k, v in config.items('Credentials'):
             setattr(self, k, v)
