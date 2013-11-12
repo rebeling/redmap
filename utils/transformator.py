@@ -52,6 +52,7 @@ def restructure_data(data):
     for key, items in restructure.iteritems():
         # print key.encode('utf-8')
         # print items
+        # print "\n".join(items[0].keys())
 
         if key.encode('utf-8')  == "Story":
             new_items[key] = []
@@ -82,9 +83,10 @@ def restructure_data(data):
             new_items[key] = alltasks
 
         elif key.encode('utf-8')  == "Unterstützung":
-            new_items[key] = []
+            # add support to stories
+            # new_items[key] = []
             for item in items:
-                new_items[key].append(restructure_item(key, item))
+                new_items["Story"].append(restructure_item(key, item))
 
     return new_items
 
@@ -96,6 +98,7 @@ def restructure_data(data):
 def restructure_item(type_of, item, parentid=None):
 
     new_item = {
+        'id': item['id'],
         'subject': t_(item['subject']),
         'description': t_(item['subject']),
         'created_on': item['created_on'],
@@ -111,14 +114,18 @@ def restructure_item(type_of, item, parentid=None):
 
     if type_of.encode('utf-8') == "Story":
         # print item
+        new_item['type'] = 'story'
         pass
 
     elif type_of.encode('utf-8') == "Task":
         if parentid:
             new_item['parent'] = parentid
+        new_item['type'] = 'task'
 
     elif type_of.encode('utf-8') == "Unterstützung":
         # print item
+        new_item['type'] = 'support'
+
         pass
 
     return new_item
