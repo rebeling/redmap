@@ -9,7 +9,9 @@ def t_(input):
         "backlog": "backlog",
         "neu": "new",
         "erledigt": "done",
-        "abgewiesen": "refused"
+        "abgewiesen": "refused",
+        "in bearbeitung": "in-progress",
+        "gelöst": "qa !"
     }
     if input in translate:
         return translate[input].encode('utf-8')
