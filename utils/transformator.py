@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from utils.translator import t_
+from redmine import t_
 import logging as log
 
 
@@ -252,11 +252,11 @@ def restructure_item(type_of, item, parentid=None):
     try:
         new_item = {
             'id': item['id'],
-            'subject': t_(item['subject']),
-            'description': t_(item['subject']),
+            'subject': t_(item['subject'].encode('utf-8')),
+            'description': t_(item['description'].encode('utf-8')),
             'created_on': item['created_on'],
-            'author': t_(item['author']['name']),
-            'assigned_to': t_(item['assigned_to']['name']),
+            'author': t_(item['author']['name'].encode('utf-8')),
+            'assigned_to': t_(item['assigned_to']['name'].encode('utf-8')),
             'status': t_(item['status']['name'].lower().encode('utf-8')),
             # 'updated_on': item['updated_on'],
             # 'done_ratio': item['done_ratio']
@@ -264,13 +264,13 @@ def restructure_item(type_of, item, parentid=None):
         }
 
         try:
-            new_item['fixed_version'] = t_(item['fixed_version']['name']).lower()
+            new_item['fixed_version'] = t_(item['fixed_version']['name'].lower().encode('utf-8'))
         except:
             log.info("no such field")
 
         for field in ['start_date']:
             try:
-                new_item[field] = t_(item[field]).lower()
+                new_item[field] = item[field]
             except:
                 log.info("no such field %s" % field)
 
@@ -293,7 +293,12 @@ def restructure_item(type_of, item, parentid=None):
             # print item
             new_item['type'] = 'support'
 
+...?!
             pass
+
+
+
+
 
         return new_item
     except Exception, e:
