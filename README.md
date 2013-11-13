@@ -13,7 +13,11 @@ The *cfg/secret.cfg* is ignored and contains your connection data, like this:
     user:y
     pw:z
     key:a
+
+    [Settings]
     project:b
+    limit=c
+    filepath:d
 
 
 Used libraries
