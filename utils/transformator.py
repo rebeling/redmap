@@ -5,19 +5,11 @@ import logging as log
 
 
 def restructure_data(data):
+    """
+        input is a json structure of the complete project
+        so is the output, but restructured
 
-    # total_count: data['total_count']
-    restructure = {}
-    for issue in data['issues']:
-        # Story, Task, Unterst...
-        type_of = issue['tracker']['name']
-        buffer = restructure.get(type_of, [])
-        buffer.append(issue)
-        restructure[type_of] = buffer
-
-
-
-            # 'Story': [{
+        # 'Story': [{
         #     'subject':                 # title
         #     'description':             # description
         #     'created_on':              #
@@ -45,25 +37,30 @@ def restructure_data(data):
         #             'status':
         #             'blocked_by': [taskId]
         #
+    """
 
-
-
-
+    # total_count: data['total_count']
+    restructure = {}
+    for issue in data['issues']:
+        # translate type Story, Task, Unterst...
+        # and create a dict of all with a list of its issues
+        type_of = t_(issue['tracker']['name'].encode('utf-8').lower())
+        buffer = restructure.get(type_of, [])
+        buffer.append(issue)
+        restructure[type_of] = buffer
 
     new_items = {}
-    no_parent_task = False
-    no_parent_error = False
-    no_parent_feature = False
-
+    no_parent = {
+        "task": False,
+        "bug": False,
+        "feature": False
+    }
 
     for key, items in restructure.iteritems():
-        # print key.encode('utf-8')
-        # print items
-        # print "\n".join(items[0].keys())
 
 
-        if key.encode('utf-8') == "Story" or key.encode('utf-8') == "Arbeitspaket":
-            new_items[key] = new_items.get('Story', [])
+        if key == "story":
+            new_items[key] = new_items.get('story', [])
 
             for item in items:
                 newone = restructure_item(key, item)
@@ -89,8 +86,37 @@ def restructure_data(data):
 
 
 
+        elif key == "package":
 
-        elif key.encode('utf-8')  == "Task":
+            # new_items[key] = new_items.get('story', [])
+
+            for item in items:
+                print item
+                newone = restructure_item(key, item)
+            #     if newone:
+            #         new_items[key].append(newone)
+
+            # # # in order to sort the stories and put the backlogs at the end
+            # # # we prefix 'sprint ' to 'backlog' and remove it after the sorting
+            # if 'fixed_version' in new_items[key][0]:
+            #     stories = new_items[key]
+            #     for story in stories:
+            #         if 'fixed_version' not in story:
+            #             story['fixed_version'] = 'None'
+            #         if 'backlog' in story['fixed_version']:
+            #             story['fixed_version'] = 'sprint ' + story['fixed_version']
+            #     stories = sorted(stories, key=lambda k: k['fixed_version'])
+            #     for story in stories:
+            #         if 'backlog' in story['fixed_version']:
+            #             story['fixed_version'] = story['fixed_version'][7:]
+
+            #     new_items[key] = stories
+
+
+
+
+
+        elif key  == "task":
 
             alltasks = {}
 
@@ -99,42 +125,37 @@ def restructure_data(data):
                 if 'parent' in item:
                     parentid = item['parent']['id']
                     tasks = alltasks.get(parentid, [])
-                    tasks.append(restructure_item("Task", item, parentid=parentid))
+                    tasks.append(restructure_item("task", item, parentid=parentid))
                     alltasks[parentid] = tasks
                 else:
-                    no_parent_task = True
+                    no_parent['task'] = True
                     tasks_without_parent = alltasks.get('no_parent_task', [])
-                    tasks_without_parent.append(restructure_item("Task", item))
+                    tasks_without_parent.append(restructure_item("task", item))
                     alltasks['no_parent_task'] = tasks_without_parent
 
-
-
-            thetasks = new_items.get("Task", {})
+            thetasks = new_items.get("task", {})
             for k,v in alltasks.iteritems():
                 if k in thetasks:
                     for x in v:
                         thetasks[k].append(x)
                 else:
                     thetasks[k] = v
-            new_items["Task"] = thetasks
+            new_items["task"] = thetasks
 
 
 
-        elif key.encode('utf-8')  == "Unterstützung":
-
+        elif key == "support":
             for item in items:
                 if 'parent' in item:
                     print 'support with parent'
-
-                new_items["Story"].append(restructure_item(key, item))
-
+                new_items["story"].append(restructure_item(key, item))
 
 
-        elif key.encode('utf-8')  == "Fehler" or key.encode('utf-8')  == "Feature":
+        elif key == "bug" or key == "feature":
 
-            x = key.encode('utf-8')
-            if x == "Fehler":
-                var = "error"
+            x = key
+            if x == "bug":
+                var = "bug"
             else:
                 var = "feature"
             alltasks = {}
@@ -149,23 +170,23 @@ def restructure_data(data):
                     pass
                     # deal with them
                 else:
-                    if var == "error":
-                        no_parent_error = True
+                    if var == "bug":
+                        no_parent['bug'] = True
                     else:
-                        no_parent_feature = True
+                        no_parent['feature'] = True
 
                     tasks_without_parent = alltasks.get('no_parent_%s' % var, [])
                     tasks_without_parent.append(restructure_item(key, item))
                     alltasks['no_parent_%s' % var] = tasks_without_parent
 
-            thetasks = new_items.get("Task", {})
+            thetasks = new_items.get("task", {})
             for k,v in alltasks.iteritems():
                 if k in thetasks:
                     for x in v:
                         thetasks[k].append(x)
                 else:
                     thetasks[k] = v
-            new_items["Task"] = thetasks
+            new_items["task"] = thetasks
 
 
 
@@ -183,66 +204,44 @@ def restructure_data(data):
         # Arbeitspaket << ?! ?!
 
         else:
-            print "another key ", key.encode('utf-8')
+            print "another key ", key
             print items
             print
 
 
 
-
-
-
-
     # # at the end append a story dummy for every rubbish at least to show
     # # may its just created on run
-    if no_parent_error:
-        no_parent_dummy = {
-            'id': 'no_parent_error',
-            'subject': 'All errors without a story',
-            'description': '',
-            'created_on': '',
-            'author': {'name': 'AutoGenerated'},
-            'assigned_to': {'name': ''},
-            'status': {'name': 'different'},
-        }
-        stories = new_items.get('Story', [])
-        the_dummy = restructure_item('Story', no_parent_dummy)
-        stories.append(the_dummy)
-        new_items['Story'] = stories
+    if no_parent['bug']:
+        new_items = add_a_dummy_story(new_items, id='no_parent_bug',
+                                subject='All bugs without a story')
 
-    if no_parent_task:
-        no_parent_dummy = {
-            'id': 'no_parent_task',
-            'subject': 'All tasks without a story',
-            'description': '',
-            'created_on': '',
-            'author': {'name': 'AutoGenerated'},
-            'assigned_to': {'name': ''},
-            'status': {'name': 'different'},
-        }
-        stories = new_items.get('Story', [])
-        the_dummy = restructure_item('Story', no_parent_dummy)
-        stories.append(the_dummy)
-        new_items['Story'] = stories
+    if no_parent['task']:
+        new_items = add_a_dummy_story(new_items, id='no_parent_task',
+                                subject='All tasks without a story')
 
-    if no_parent_feature:
-        no_parent_dummy = {
-            'id': 'no_parent_feature',
-            'subject': 'All features without a story',
-            'description': '',
-            'created_on': '',
-            'author': {'name': 'AutoGenerated'},
-            'assigned_to': {'name': ''},
-            'status': {'name': 'different'},
-        }
-        stories = new_items.get('Story', [])
-        the_dummy = restructure_item('Story', no_parent_dummy)
-        stories.append(the_dummy)
-        new_items['Story'] = stories
+    if no_parent['feature']:
+        new_items = add_a_dummy_story(new_items, id='no_parent_task',
+                                subject='All tasks without a story')
 
     return new_items
 
 
+def add_a_dummy_story(new_items, id, subject):
+    no_parent_dummy = {
+        'id': id,
+        'subject': subject,
+        'description': '',
+        'created_on': '',
+        'author': {'name': 'AutoGenerated'},
+        'assigned_to': {'name': ''},
+        'status': {'name': 'different'},
+    }
+    stories = new_items.get('story', [])
+    the_dummy = restructure_item('story', no_parent_dummy)
+    stories.append(the_dummy)
+    new_items['story'] = stories
+    return new_items
 
 
 
@@ -293,7 +292,7 @@ def restructure_item(type_of, item, parentid=None):
             # print item
             new_item['type'] = 'support'
 
-...?!
+            # ...?!
             pass
 
 

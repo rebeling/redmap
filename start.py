@@ -28,6 +28,7 @@ def main():
         restructured = restructure_data(data_or_msg)
         final_data = json.dumps(restructured, indent=4, sort_keys=True)
         write_content_to(red.filepath, final_data)
+        write_content_to('data/content.json', final_data)
         log.info('json file craeted')
     else:
         log.info(data_or_msg)
