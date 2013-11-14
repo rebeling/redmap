@@ -1,7 +1,7 @@
 redmap
 ======
 
-access the redmine data of a project
+transforms the data of a redmine project to a more general structure
 
 
 Configuration
@@ -18,6 +18,11 @@ The *cfg/secret.cfg* is ignored and contains your connection data, like this:
     project:b
     limit=c
     filepath:d
+
+
+Requirement Rules
+-------------------
+...
 
 
 Used libraries
