@@ -12,8 +12,8 @@ def get_project_data(red):
     # from redmine import Redmine
     # server = Redmine(red.redmine_url, key=red.key)
     # print server.projects[red.project]
-    url = "%s/projects/%s/issues.json?limit=%s&status_id=*" % (
-        red.redmine_url, red.project, red.limit)
+    url = "%s%s/issues.json?limit=%s&status_id=*" % (
+        red.url, red.project, red.limit)
     r = requests.get(url, auth=(red.user, red.pw))
     if r.status_code == 200:
         log.info("success, url: %s" % url)

@@ -9,7 +9,7 @@ Configuration
 The *cfg/secret.cfg* is ignored and contains your connection data, like this:
 
     [Credentials]
-    redmine_url:x
+    url:x
     user:y
     pw:z
     key:a
