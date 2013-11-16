@@ -17,9 +17,9 @@ translations = {
     "unterstützung": "support"
 }
 
-def t_(input):
-    # translate or map input to
+def red_t_(input):
     if input in translations:
         return translations[input]
     else:
         return input
+

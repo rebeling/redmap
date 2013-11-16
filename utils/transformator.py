@@ -1,36 +1,19 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from redmine import t_
+from redmine import red_t_
 import logging as log
 
 
 def organize_issues_by_type(data):
-    # total_count: data['total_count']
     restructure = {}
     for issue in data['issues']:
         # translate type Story, Task, Unterst...
         # and create a dict of all with a list of its issues
-        type_of = t_(issue['tracker']['name'].encode('utf-8').lower())
+        type_of = red_t_(issue['tracker']['name'].encode('utf-8').lower())
         buffer = restructure.get(type_of, [])
         buffer.append(issue)
         restructure[type_of] = buffer
     return restructure
-
-
-def sort_stories_by_key(stories, sort_key='fixed_version'):
-    # # in order to sort the stories and put the backlogs at the end
-    # # we prefix 'sprint ' to 'backlog' and remove it after the sorting
-    if 'fixed_version' in stories[0]:
-        for story in stories:
-            if 'fixed_version' not in story:
-                story['fixed_version'] = 'None'
-            if 'backlog' in story['fixed_version']:
-                story['fixed_version'] = 'sprint ' + story['fixed_version']
-        stories = sorted(stories, key=lambda k: k['fixed_version'])
-        for story in stories:
-            if 'backlog' in story['fixed_version']:
-                story['fixed_version'] = story['fixed_version'][7:]
-    return stories
 
 
 def process(item, alltasks, key, no_parent):
@@ -58,7 +41,7 @@ def extend_thetasks(alltasks, processed_items):
     return thetasks
 
 
-def restructure_data(data):
+def restructure_data(data, project, project_url):
     """
         input is a json structure of the complete project
         so is the output, but restructured
@@ -66,9 +49,18 @@ def restructure_data(data):
         2. process for every type the issues list
         3. ..
     """
+    processed_items = {
+        'story': [],
+        'task': {},
+        'info': {
+            'total_count': data['total_count'],
+            'project': project,
+            'project_url': project_url
+        }
+    }
+
     restructure = organize_issues_by_type(data)
 
-    processed_items = {}
     no_parent = {
         "task": False,
         "package": False,
@@ -85,7 +77,6 @@ def restructure_data(data):
                 newone = restructure_item(key, item)
                 if newone:
                     buffer.append(newone)
-            buffer = sort_stories_by_key(buffer, sort_key='fixed_version')
             this_items = processed_items.get(key, [])
             processed_items[key] = this_items + buffer
 
@@ -115,26 +106,20 @@ def restructure_data(data):
 
 
         else:
-            print "another key ", key
-            print items
-            print
-
+            log.info("another key: %s" % key)
 
 
     # # at the end append a story dummy for every rubbish at least to show
-    # # may its just created on run
-    dummies = { 'support': {'id': 'no_parent_support',
-                           'subject': 'All support without a story'
-                },
-                'bug': {'id': 'no_parent_bug',
-                        'subject': 'All bugs without a story'
-                },
-                'task': {'id': 'no_parent_task',
-                        'subject': 'All tasks without a story'
-                },
-                'feature': {'id': 'no_parent_task',
-                            'subject': 'All tasks without a story'
-                }
+    # # identify false positives in the project
+    dummies = {
+        'support': {'id': 'no_parent_support',
+                    'subject': 'All support without a story'},
+        'bug': {    'id': 'no_parent_bug',
+                    'subject': 'All bugs without a story'},
+        'task': {   'id': 'no_parent_task',
+                    'subject': 'All tasks without a story'},
+        'feature': {'id': 'no_parent_task',
+                    'subject': 'All tasks without a story'}
     }
 
     for key, value in no_parent.iteritems():
@@ -145,6 +130,20 @@ def restructure_data(data):
             processed_items['story'] = thisstories
 
 
+    # create a second layer to augmented the functionalities of redmine
+    # for agile development
+    snd_layer = {
+        'story':{},
+        'task':{}
+    }
+
+    for e in processed_items['story']:
+        snd_layer['story'][e['id']] = {'position': 0, 'sprint': 'initial'}
+        if e['id'] in processed_items['task']:
+            for task in processed_items['task'][e['id']]:
+                snd_layer['task'][task['id']] = {'position': 0, 'sprint': 'initial'}
+
+    processed_items['second_layer'] = snd_layer
     return processed_items
 
 
@@ -163,35 +162,29 @@ def add_a_dummy_story(dummies, key):
 
 def restructure_item(type_of, item, parentid=None):
 
-    try:
-        new_item = {
-            'id': item['id'],
-            'subject': t_(item['subject'].encode('utf-8')),
-            'description': t_(item['description'].encode('utf-8')),
-            'created_on': item['created_on'],
-            'author': t_(item['author']['name'].encode('utf-8')),
-            'assigned_to': t_(item['assigned_to']['name'].encode('utf-8')),
-            'status': t_(item['status']['name'].lower().encode('utf-8')),
-            'type': type_of
-            # 'updated_on': item['updated_on'],
-            # 'done_ratio': item['done_ratio']
-            # 'due_date': item['due_date'],
-        }
+    new_item = {
+        'id': item['id'],
+        'subject': red_t_(item['subject'].encode('utf-8')),
+        'description': red_t_(item['description'].encode('utf-8')),
+        'created_on': item['created_on'],
+        'author': red_t_(item['author']['name'].encode('utf-8')),
+        'status': red_t_(item['status']['name'].lower().encode('utf-8')),
+        'type': type_of
+        # 'updated_on': item['updated_on'],
+        # 'done_ratio': item['done_ratio']
+        # 'due_date': item['due_date'],
+    }
 
+    for x in ['fixed_version', 'assigned_to']:
         try:
-            new_item['fixed_version'] = t_(item['fixed_version']['name'].lower().encode('utf-8'))
+            new_item[x] = red_t_(item[x]['name'].lower().encode('utf-8'))
         except:
-            log.info("no such field")
+            log.info("no such field %s" % x)
 
-        for field in ['start_date', 'estimated_hours']:
-            try:
-                new_item[field] = item[field]
-            except:
-                log.info("no such field %s" % field)
+    for field in ['start_date', 'estimated_hours']:
+        try:
+            new_item[field] = item[field]
+        except:
+            log.info("no such field %s" % field)
 
-        return new_item
-
-    except Exception, e:
-        log.debug(e)
-        return None
-
+    return new_item
