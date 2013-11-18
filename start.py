@@ -31,6 +31,10 @@ def main():
         final_data = json.dumps(restructured, indent=4, sort_keys=True)
         write_content_to(red.filepath, final_data)
         write_content_to('data/content.json', final_data)
+
+        # final_order = json.dumps(restructured['second_layer'], indent=4, sort_keys=True)
+        # write_content_to(red.filepath.replace('content', 'order'), final_order)
+
         log.info('json file craeted')
     else:
         log.info(data_or_msg)
