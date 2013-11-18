@@ -50,7 +50,7 @@ def restructure_data(data, project, project_url):
         3. ..
     """
     processed_items = {
-        'story': [],
+        'story': {},
         'task': {},
         'info': {
             'total_count': data['total_count'],
@@ -72,14 +72,10 @@ def restructure_data(data, project, project_url):
     for key, items in restructure.iteritems():
 
         if key == "story":
-            buffer = []
             for item in items:
                 newone = restructure_item(key, item)
                 if newone:
-                    buffer.append(newone)
-            this_items = processed_items.get(key, [])
-            processed_items[key] = this_items + buffer
-
+                    processed_items[key][newone['id']] = newone
 
         elif key == "support" or key == "task":
 
@@ -87,7 +83,6 @@ def restructure_data(data, project, project_url):
             for item in items:
                 buffer, no_parent = process(item, buffer, key, no_parent)
             processed_items["task"] = extend_thetasks(buffer, processed_items)
-
 
         elif key == "bug" or key == "feature":
 
@@ -125,9 +120,7 @@ def restructure_data(data, project, project_url):
     for key, value in no_parent.iteritems():
         if value:
             buffer = add_a_dummy_story(dummies, key)
-            thisstories = processed_items.get('story', [])
-            thisstories.append(buffer)
-            processed_items['story'] = thisstories
+            processed_items['story'][key] = buffer
 
 
     # create a second layer to augmented the functionalities of redmine
@@ -137,10 +130,10 @@ def restructure_data(data, project, project_url):
         'task':{}
     }
 
-    for e in processed_items['story']:
-        snd_layer['story'][e['id']] = {'position': 0, 'sprint': 'initial'}
-        if e['id'] in processed_items['task']:
-            for task in processed_items['task'][e['id']]:
+    for e,value in processed_items['story'].iteritems():
+        snd_layer['story'][e] = {'position': 0, 'sprint': 'initial'}
+        if e in processed_items['task']:
+            for task in processed_items['task'][e]:
                 snd_layer['task'][task['id']] = {'position': 0, 'sprint': 'initial'}
 
     processed_items['second_layer'] = snd_layer
