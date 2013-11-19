@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from utils.config_parser import ConfigData
-from redmine.redreq import get_project_data
-from utils.transformator import restructure_data
-from utils import write_content_to
+from application.utils.config_parser import ConfigData
+from application.redmine.redreq import get_project_data
+from application.utils.transformator import restructure_data
+from application.utils import write_content_to
 import logging as log
 import logging.config
 import json
@@ -29,11 +29,7 @@ def main():
                                         red.project,
                                         '%s' % red.url + red.project)
         final_data = json.dumps(restructured, indent=4, sort_keys=True)
-        write_content_to(red.filepath, final_data)
-        write_content_to('data/content.json', final_data)
-
-        # final_order = json.dumps(restructured['second_layer'], indent=4, sort_keys=True)
-        # write_content_to(red.filepath.replace('content', 'order'), final_order)
+        write_content_to('application/data/content.json', final_data)
 
         log.info('json file craeted')
     else:
@@ -43,4 +39,7 @@ def main():
 
 
 if __name__ == '__main__':
-    main()
+    # main()
+    from application.api import app
+    app.run(debug=True)
+
