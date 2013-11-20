@@ -16,17 +16,16 @@ def access_content(task='r', content=None):
         return content
 
 
-def update(type_of, the_id, direction):
+def update(type_of, storyid, taskid, direction):
     content = access_content(task='r')
-
-    log.debug('hello')
-
-    # return "%s %s %s" % (type_of, the_id, direction)
-    # return str(type(the_id))
 
     if type_of == 'story':
         for item in content['story']:
-            if item['id'] == int(the_id):
+            try:
+                storyid = int(storyid)
+            except Exception, e:
+                pass
+            if item['id'] == storyid:
                 # update the order
                 # get the actual position and change, then update the neighboor to
                 old_position = item['position']
@@ -37,10 +36,30 @@ def update(type_of, the_id, direction):
                 item['position'] = newposition
                 break
         for item in content['story']:
-            if item['position'] == newposition and item['id'] != int(the_id):
+            if item['position'] == newposition and item['id'] != storyid:
                 item['position'] = old_position
 
-    content['story'] = order_by_position(content['story'])
-    access_content(task='w', content=content)
+        content['story'] = order_by_position(content['story'])
+        access_content(task='w', content=content)
+
+    else:
+        for item in content['task'][storyid]:
+            if item['id'] == int(taskid):
+                # update the order
+                # get the actual position and change, then update the neighboor to
+                old_position = item['position']
+                if direction == 'up':
+                    newposition = old_position - 1
+                else:
+                    newposition = old_position + 1
+                item['position'] = newposition
+                break
+
+        for item in content['task'][storyid]:
+            if item['position'] == newposition and item['id'] != int(taskid):
+                item['position'] = old_position
+
+        content['task'][storyid] = order_by_position(content['task'][storyid])
+        access_content(task='w', content=content)
 
     return "Done."
