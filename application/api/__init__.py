@@ -12,8 +12,8 @@ def deliver_content():
 
 @app.route("/update/order/<type_of>/<storyid>/<taskid>/<direction>")
 def update_order(type_of, storyid, taskid, direction):
-    result = update(type_of, storyid, taskid, direction)
-    return result
+    the_updated = update(type_of, storyid, taskid, direction)
+    return the_updated
 
 
 if __name__ == "__main__":
