@@ -74,8 +74,8 @@ def restructure_data(data, project, project_url):
     for key, items in restructure.iteritems():
 
         if key == "story":
-            for item in items:
-                newone = restructure_item(key, item)
+            for i, item in enumerate(items):
+                newone = restructure_item(key, item, position=i)
                 if newone:
                     processed_items[key].append(newone)
 
@@ -119,10 +119,20 @@ def restructure_data(data, project, project_url):
                     'subject': 'All tasks without a story'}
     }
 
+    dummy_pos = len(processed_items['story'])
     for key, value in no_parent.iteritems():
         if value:
-            buffer = add_a_dummy_story(dummies, key)
+            dummy_pos += 1
+            buffer = add_a_dummy_story(dummies, key, position=dummy_pos)
             processed_items['story'].append(buffer)
+
+
+    for key in processed_items['story']:
+        try:
+            for i,task in enumerate(processed_items['task'][key['id']]):
+                task['position'] = i
+        except:
+            pass
 
     try:
         with open('application/data/content.json', 'r') as f:
@@ -137,12 +147,20 @@ def restructure_data(data, project, project_url):
     except:
         pass
 
+    # order at the end
     processed_items['story'] = order_by_position(processed_items['story'])
+
+    for key in processed_items['story']:
+        try:
+            processed_items['task'][key['id']] = order_by_position(processed_items['task'][key['id']])
+        except:
+            pass
 
     return processed_items
 
 
-def add_a_dummy_story(dummies, key):
+
+def add_a_dummy_story(dummies, key, position=0):
     no_parent_dummy = {
         'id': dummies[key]['id'],
         'subject': dummies[key]['subject'],
@@ -152,10 +170,10 @@ def add_a_dummy_story(dummies, key):
         'assigned_to': {'name': ''},
         'status': {'name': 'unknown'},
     }
-    return restructure_item('story', no_parent_dummy)
+    return restructure_item('story', no_parent_dummy, position=position)
 
 
-def restructure_item(type_of, item, parentid=None):
+def restructure_item(type_of, item, parentid=None, position=0):
 
     new_item = {
         'id': item['id'],
@@ -165,7 +183,7 @@ def restructure_item(type_of, item, parentid=None):
         'author': red_t_(item['author']['name'].encode('utf-8')),
         'status': red_t_(item['status']['name'].lower().encode('utf-8')),
         'type': type_of,
-        'position': 0,
+        'position': position,
         'sprint': 'initial'
     }
 
