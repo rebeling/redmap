@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import json
-from application.utils import order_by_position
+from application.utils import order_by_key
 import logging as log
 
 
@@ -27,7 +27,7 @@ def update(type_of, storyid, taskid, direction):
                 pass
             if item['id'] == storyid:
                 # update the order
-                # get the actual position and change, then update the neighboor to
+                # get the actual position and change, then update the neighboor
                 old_position = item['position']
                 if direction == 'left':
                     newposition = old_position - 1
@@ -39,7 +39,7 @@ def update(type_of, storyid, taskid, direction):
             if item['position'] == newposition and item['id'] != storyid:
                 item['position'] = old_position
 
-        content['story'] = order_by_position(content['story'])
+        content['story'] = order_by_key(content['story'], 'position')
         access_content(task='w', content=content)
 
     else:
@@ -59,7 +59,7 @@ def update(type_of, storyid, taskid, direction):
             if item['position'] == newposition and item['id'] != int(taskid):
                 item['position'] = old_position
 
-        content['task'][storyid] = order_by_position(content['task'][storyid])
+        content['task'][storyid] = order_by_key(content['task'][storyid], 'position')
         access_content(task='w', content=content)
 
-    return "Done."
+    return json.dumps(content)

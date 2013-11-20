@@ -1,25 +1,37 @@
 #!/usr/bin/env python
 # encoding: utf-8
+from application.redmine.redreq import get_project_data
+from application.utils.transformator import restructure_data
+from application.utils import write_content_to
+import json
+import logging as log
 
 
-# some stuff needs to be translated/transformed and this is specific to
-# redmine and the user settings: languages, type of elements etc.
-# todo: find a nicer way to solve this problem more general
-translations = {
-    "backlog": "backlog",
-    "neu": "new",
-    "erledigt": "done",
-    "abgewiesen": "refused",
-    "in bearbeitung": "in-progress",
-    "gelöst": "qa !",
-    "arbeitspaket": "package",
-    "fehler": "bug",
-    "unterstützung": "support"
-}
+def process_project(red):
+    """
+        1. get/set all your connection data for redmine
+        2. connect to your project and get the projects issues.json
+        3. restructure the data in transformator
+        4. save data as json
+            todo:
+            store data somehow ...pouchdb or redis would be awesome!
+    """
+    success, data_or_msg = get_project_data(red)
 
-def red_t_(input):
-    if input in translations:
-        return translations[input]
+    if success:
+        restructured = restructure_data(data_or_msg,
+                                        red.project,
+                                        '%s' % red.url + red.project)
+        final_data = json.dumps(restructured, indent=4, sort_keys=True)
+        write_content_to('application/data/content.json', final_data)
+
+        log.info('json file craeted')
     else:
-        return input
+        log.info(data_or_msg)
+
+    log.info('Finished')
+
+
+
+
 
