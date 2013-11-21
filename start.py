@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from application.utils.config_parser import ConfigData
+from application.utils import red
 import logging.config
 import logging as log
 import sys
@@ -8,7 +8,6 @@ import sys
 
 def main():
     logging.config.fileConfig('cfg/logging.cfg')
-    red = ConfigData()
     cl_args = sys.argv
     log.info("args: %s" % cl_args)
 
