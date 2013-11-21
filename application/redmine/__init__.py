@@ -16,6 +16,7 @@ def process_project(red):
             todo:
             store data somehow ...pouchdb or redis would be awesome!
     """
+    log.info('started')
     success, data_or_msg = get_project_data(red)
 
     if success:
@@ -24,14 +25,7 @@ def process_project(red):
                                         '%s' % red.url + red.project)
         final_data = json.dumps(restructured, indent=4, sort_keys=True)
         write_content_to('application/data/content.json', final_data)
-
-        log.info('json file craeted')
     else:
-        log.info(data_or_msg)
+        log.info("failed %s" % data_or_msg)
 
-    log.info('Finished')
-
-
-
-
-
+    log.info('finished')
