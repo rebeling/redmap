@@ -5,7 +5,6 @@ from application.redmine.redreq import get_issue_details
 from application.utils import order_by_key
 import logging as log
 import json
-from application.utils import red
 
 
 def organize_issues_by_type(data):
@@ -182,9 +181,6 @@ def check_latest(processed_items):
     except Exception, e:
         log.debug("failed to update with latest data: %s" % e)
 
-
-
-
     return processed_items
 
 
@@ -203,23 +199,6 @@ def items_order(items):
             log.error('not able to order the items %s' % e)
 
     return items
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
@@ -242,7 +221,7 @@ def restructure_item(type_of, item, parentid=None, position=0, dummy=None):
     done_ratio = 0
     spent_hours = 0
     if dummy == None:
-        success, data = get_issue_details(item['id'], red)
+        success, data = get_issue_details(item['id'])
         if success:
             done_ratio = data['issue'].get('done_ratio', 0)
             spent_hours = data['issue'].get('spent_hours', 0)
@@ -281,97 +260,65 @@ def restructure_item(type_of, item, parentid=None, position=0, dummy=None):
 
 
 
+# def estimation_and_progress(tasks):
+
+#     estimations = {
+#         't_total': 0,
+#         't_real': 0,
+#         't_over': 0,
+#         'c_done': 0,
+#         'c_inprogress': 0,
+#         'c_total': 0
+#     }
+
+#     for key, value in tasks:
+
+#         estimations['t_total'] += value['est']
+#         estimations['c_total'] += 1
+
+#         if value['status'] == 'done':
+#             estimations['c_done'] += 1
+#             estimations['t_real'] += value['real']
+#             x = value['est'] - value['real']
+#             if x < 0:
+#                 estimations['t_over'] += x * -1
+
+#         if value['status'] == 'inprogress':
+#             estimations['c_inprogress'] += 1
+#             estimations['t_real'] += value['real']
+
+#     return estimations
 
 
 
 
 
+# def calculate_progress(estimated, realworked, status):
+#         if status == 'done' or realworked >= estimated:
+#             return 100
+#         elif realworked < estimated:
+#             return (realworked * 100)/estimated
+#         else:
+#             return 0
+
+# def check_blocking(blockedby):
+#     if len(blockedby) > 0:
+#         return True
+#     else:
+#         return False
 
 
+# # storyObj = (story, related_tasks) ->
 
-def estimation_and_progress(tasks):
+# #     task_ids = []
+# #     if related_tasks
+# #         for i,task in related_tasks
+# #             task_ids.push task.id
 
-    estimations = {
-        't_total': 0,
-        't_real': 0,
-        't_over': 0,
-        'c_done': 0,
-        'c_inprogress': 0,
-        'c_total': 0
-    }
+# #     the_story = angular.copy(story)
 
-    for key, value in tasks:
+# #     the_story['tasks'] = related_tasks
+# #     the_story['task_ids'] = task_ids
+# #     the_story['estimations'] = estimation_and_progress(related_tasks)
 
-        estimations['t_total'] += value['est']
-        estimations['c_total'] += 1
-
-        if value['status'] == 'done':
-            estimations['c_done'] += 1
-            estimations['t_real'] += value['real']
-            x = value['est'] - value['real']
-            if x < 0:
-                estimations['t_over'] += x * -1
-
-        if value['status'] == 'inprogress':
-            estimations['c_inprogress'] += 1
-            estimations['t_real'] += value['real']
-
-    return estimations
-
-
-
-
-
-def calculate_progress(estimated, realworked, status):
-        if status == 'done' or realworked >= estimated:
-            return 100
-        elif realworked < estimated:
-            return (realworked * 100)/estimated
-        else:
-            return 0
-
-def check_blocking(blockedby):
-    if len(blockedby) > 0:
-        return True
-    else:
-        return False
-
-
-# storyObj = (story, related_tasks) ->
-
-#     task_ids = []
-#     if related_tasks
-#         for i,task in related_tasks
-#             task_ids.push task.id
-
-#     the_story = angular.copy(story)
-
-#     the_story['tasks'] = related_tasks
-#     the_story['task_ids'] = task_ids
-#     the_story['estimations'] = estimation_and_progress(related_tasks)
-
-#     the_story
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+# #     the_story

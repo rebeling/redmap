@@ -17,11 +17,10 @@ def process_project(red):
             store data somehow ...pouchdb or redis would be awesome!
     """
     log.info('started')
-    success, data_or_msg = get_project_data(red)
 
+    success, data_or_msg = get_project_data()
     if success:
-        restructured = restructure_data(data_or_msg,
-                                        red.project,
+        restructured = restructure_data(data_or_msg, red.project,
                                         '%s' % red.url + red.project)
         final_data = json.dumps(restructured, indent=4, sort_keys=True)
         write_content_to('application/data/content.json', final_data)

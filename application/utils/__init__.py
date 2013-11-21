@@ -4,7 +4,6 @@ import datetime
 from application.utils.config_parser import ConfigData
 import logging as log
 
-
 red = ConfigData()
 
 

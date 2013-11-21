@@ -17,24 +17,32 @@ def access_content(task='r', content=None):
 
 
 def update(type_of, storyid, taskid, direction):
+    """
+        update the order
+        get the actual position and change, then update the neighboor
+
+    """
     content = access_content(task='r')
 
     if type_of == 'story':
         for item in content['story']:
+
             try:
                 storyid = int(storyid)
-            except Exception, e:
+            except:
                 pass
+
             if item['id'] == storyid:
-                # update the order
-                # get the actual position and change, then update the neighboor
+                log.debug("change position for id %s" % taskid)
                 old_position = item['position']
                 if direction == 'left':
                     newposition = old_position - 1
                 else:
                     newposition = old_position + 1
                 item['position'] = newposition
+                log.debug("update positions - old: %s new: %s" % (old_position, newposition))
                 break
+
         for item in content['story']:
             if item['position'] == newposition and item['id'] != storyid:
                 item['position'] = old_position
@@ -43,20 +51,23 @@ def update(type_of, storyid, taskid, direction):
         access_content(task='w', content=content)
 
     else:
+
         for item in content['task'][storyid]:
             if item['id'] == int(taskid):
-                # update the order
-                # get the actual position and change, then update the neighboor to
+                log.debug("change position for id %s" % taskid)
+
                 old_position = item['position']
                 if direction == 'up':
                     newposition = old_position - 1
                 else:
                     newposition = old_position + 1
                 item['position'] = newposition
+                log.debug("update positions - old: %s new: %s" % (old_position, newposition))
                 break
 
         for item in content['task'][storyid]:
             if item['position'] == newposition and item['id'] != int(taskid):
+                log.debug("also update position for id %s" % item['id'])
                 item['position'] = old_position
 
         content['task'][storyid] = order_by_key(content['task'][storyid], 'position')
