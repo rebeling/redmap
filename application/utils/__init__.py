@@ -1,6 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import datetime
+from application.utils.config_parser import ConfigData
+import logging as log
+
+
+red = ConfigData()
 
 
 def get_week_num_of(thisdate=None):
@@ -17,7 +22,11 @@ def write_content_to(filepath, content):
 
 
 def order_by_key(list_of_dicts, key2order):
-    newlist = sorted(list_of_dicts, key=lambda k: k[key2order])
+    try:
+        newlist = sorted(list_of_dicts, key=lambda k: k[key2order])
+    except Exception, e:
+        log.error("no way %s" % e)
+
     return newlist
 
 
