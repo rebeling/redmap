@@ -4,6 +4,16 @@ redmap
 transforms the data of a redmine project to a more general structure
 
 
+Todo
+-----
+- get spent_hours and transfer all calculations from frontend
+    to the backend ...no need to do this in frontend
+- add loader
+- add the frontend in here
+- button to get data from updated redmine
+
+
+
 Configuration
 ----------------
 The *cfg/secret.cfg* is ignored and contains your connection data, like this:
@@ -26,10 +36,8 @@ Using artificial structures and self defined stuff in your pm-tool makes you
 need to change this code heavily. But if you go with the following its pretty
 easy:
 
--
--
--
-
+- Story
+- Task / Feature / Bug
 
 
 Data Storage
