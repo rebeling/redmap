@@ -1,9 +1,9 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from application.redmine.translation import red_t_
-from application.redmine.redreq import get_issue_details
+from application.redmine.red_translation import red_t_
+from application.redmine.red_requests import get_issue_details
+from application.redmine.red_item import create_item # Story, Task
 from application.utils import order_by_key
-from application.utils.story_and_tasks import create_item # Story, Task
 import logging as log
 import json
 from application.utils import timing
