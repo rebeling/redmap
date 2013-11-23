@@ -18,19 +18,14 @@ def access_content(task='r', content=None):
 
 def update(type_of, storyid, taskid, direction):
     """
-        update the order
-        get the actual position and change, then update the neighboor
+    update the order
+    get the actual position and change, then update the neighboor
 
     """
     content = access_content(task='r')
 
     if type_of == 'story':
         for item in content['story']:
-
-            try:
-                storyid = int(storyid)
-            except:
-                pass
 
             if item['id'] == storyid:
                 log.debug("change position for id %s" % taskid)
