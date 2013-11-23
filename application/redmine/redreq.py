@@ -7,16 +7,10 @@ from application.utils import red
 
 def request_redmine_api(url):
     """
-        would be nice to use pyredmine, but it actually can not find
-        the project on server I am looking for ...requests does
-
+    get data from redmine api
     """
-    # ?pyredmine - https://pypi.python.org/pypi/pyredmine/0.2.1
-    # from redmine import Redmine
-    # server = Redmine(red.redmine_url, key=red.key)
     r = requests.get(url, auth=(red.user, red.pw))
     if r.status_code == 200:
-        log.info("success, url: %s" % url)
         return True, r.json()
     else:
         log.info("error %s, url: %s" % (r.status_code, url))
@@ -31,4 +25,7 @@ def get_project_data():
 
 def get_issue_details(an_id):
     url = "%s/issues/%s.json" % (red.url, an_id)
-    return request_redmine_api(url)
+    success, details = request_redmine_api(url)
+    if success:
+        details = {k: details.get(k, None) for k in ['done_ratio', 'spent_hours']}
+    return success, details
