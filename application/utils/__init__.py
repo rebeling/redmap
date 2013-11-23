@@ -3,8 +3,20 @@
 import datetime
 from application.utils.config_parser import ConfigData
 import logging as log
+import time
+
 
 red = ConfigData()
+
+
+def timing(f):
+    def wrap(*args):
+        t1 = time.time()
+        ret = f(*args)
+        t2 = time.time()
+        print "» %.2f sec" % (t2 - t1), f.func_name
+        return ret
+    return wrap
 
 
 def get_week_num_of(thisdate=None):
@@ -18,7 +30,6 @@ def get_week_num_of(thisdate=None):
 def write_content_to(filepath, content):
     with open(filepath, 'w') as f:
         f.write(content)
-
 
 def order_by_key(list_of_dicts, key2order):
     try:
