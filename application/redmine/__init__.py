@@ -3,10 +3,14 @@
 from application.redmine.redreq import get_project_data
 from application.utils.transformator import restructure_data
 from application.utils import write_content_to
+from application.utils import timing
 import json
 import logging as log
 
 
+
+
+@timing
 def process_project(red):
     """
         1. get/set all your connection data for redmine
