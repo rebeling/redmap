@@ -48,7 +48,7 @@ def update(type_of, storyid, taskid, direction):
     else:
 
         for item in content['task'][storyid]:
-            if item['id'] == int(taskid):
+            if item['id'] == taskid:
                 log.debug("change position for id %s" % taskid)
 
                 old_position = item['position']
@@ -61,7 +61,7 @@ def update(type_of, storyid, taskid, direction):
                 break
 
         for item in content['task'][storyid]:
-            if item['position'] == newposition and item['id'] != int(taskid):
+            if item['position'] == newposition and item['id'] != taskid:
                 log.debug("also update position for id %s" % item['id'])
                 item['position'] = old_position
 
