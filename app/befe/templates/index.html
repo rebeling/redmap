@@ -1,0 +1,326 @@
+<!DOCTYPE html>
+<html ng-app="schmite">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+        <script src="/static/lib/angular.min.js"></script>
+        <script src="/static/lib/ui-bootstrap-0.6.0.min.js"></script>
+        <script src="/static/lib/ui-bootstrap-0.6.0-tpls.js"></script>
+
+        <title>Schmite</title>
+        <meta name="viewport" content="width=device-width">
+        <link rel="stylesheet" href="/static/css/bootstrap.min.css">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.1/css/font-awesome.css" rel="stylesheet">
+<!--         <link rel="stylesheet" href="css/font-awesome.min.css">
+ -->        <link rel="stylesheet" href="/static/css/main.css">
+    </head>
+
+    <body ng-controller="IndexCtrl">
+
+        <div class="mainmenu">
+            <ul class="nav nav-tabs">
+
+              <li ng-class="{true:'active', false:''}[menupoint=='welcome']">
+                <a ng-click="menupoint='welcome'">
+                    welcome
+                </a>
+              </li>
+              <li ng-class="{true:'active', false:''}[menupoint=='map']">
+                <a ng-click="menupoint='map'">
+                    map
+                </a>
+              </li>
+              <li ng-class="{true:'active', false:''}[menupoint=='board']">
+                <a ng-click="menupoint='board'">
+                    board
+                </a>
+              </li>
+
+            </ul>
+        </div>
+
+
+        <div ng-switch="menupoint">
+
+            <div ng-switch-when="map">
+
+                <div ng-controller="ScrummapCtrl" id="storymap">
+
+                    <div ng-show="showloader" id="theloader"></div>
+
+
+                    <div class="sprintbuttons">
+                        <button class="btn btn-xs" ng-click="redmine_data()">get updated redmine</button>
+
+                        <button class="btn btn-xs" ng-click="editmode=!editmode">edit mode {{editmode}}</button>
+                    </div>
+
+
+                    <div class="sprintbuttons">
+                        <button class="btn btn-xs">sprint 1</button>
+                        <button class="btn btn-xs">sprint 2</button>
+                        <button class="btn btn-xs">sprint 3</button>
+                        <button class="btn btn-xs">sprint 4</button>
+                        <button class="btn btn-xs">sprint 5</button>
+                        <button class="btn btn-xs" ng-click="update_stories()">update</button>
+                    </div>
+
+                    <h2>Scrum map</h2>
+
+                    <table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+
+                        <tr>
+                            <th ng-repeat="story in stories">
+                                <div class="story {{story.status}} {{story.fixed_version}} {{story.type}}">
+
+                                    <div class="overallprogress" style="width:{{story.done_ratio}}%"></div>
+
+
+                                    <div class="innerstory">
+
+                                    <div ng-show="editmode" class="storyeditbuttons">
+                                        <button ng-hide="$index==0" ng-click="story_order('story', story.id, 'left')" class="btn btn-xs">
+                                            <i class="fa fa-arrow-left"></i>
+                                        </button>
+                                        <button ng-hide="$index+1==stories.length" ng-click="story_order('story', story.id, 'right')" class="btn btn-xs pull-right">
+                                            <i class="fa fa-arrow-right"></i>
+                                        </button>
+                                    </div>
+
+
+                                        <pop-over-story></pop-over-story>
+
+
+                                            <a href="https://redmine.rtrsupport.de/issues/{{story.id}}" target="_blank">
+                                                <h4>
+                                                    {{$index+1}}. {{story.subject | twolines}}
+
+                                                </h4>
+                                            </a>
+
+                                        <div class="storydetails">
+                                            <dl class="dl-horizontal">
+                                                <dt>Progress</dt>
+
+                                                <dd>{{story.estimations.c_done}}/{{story.estimations.c_total}} done</dd>
+
+                                                <dt>Version</dt>
+                                                <dd>{{story.fixed_version}}</dd>
+
+                                                <dt>Estimated</dt>
+                                                <dd>{{story.estimated_hours}}</dd>
+
+                                            </dl>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </th>
+                        </tr>
+
+                        <tr>
+                            <td ng-repeat="story in stories">
+                                <div class="task {{task.status}}" ng-repeat="task in story.tasks">
+
+                                    <div class="overallprogress" style="width:{{task.done_ratio}}%"></div>
+
+                                    <div id="{{task.id}}" title="{{task.id}}">
+
+                                        <div ng-show="editmode">
+                                            <button ng-hide="$index==0" ng-click="task_order(story.id, task.id, 'up')" class="btn btn-xs">
+                                                <i class="fa fa-arrow-up"></i>
+                                            </button>
+                                            <button ng-hide="$index+1==story.tasks.length" ng-click="task_order(story.id, task.id, 'down')" class="btn btn-xs">
+                                                <i class="fa fa-arrow-down"></i>
+                                            </button>
+                                        </div>
+
+
+                                        <div ng-show="task.blocked" class="blocked" ng-mouseenter="highlight(task.blockedby, 0)" ng-mouseleave="highlight(task.blockedby, 1)">
+                                             <i class="fa fa-circle"></i>
+                                         </div>
+
+                                        <a href="https://redmine.rtrsupport.de/issues/{{task.id}}" target="_blank">
+                                            <h4>
+                                                {{task.subject}}
+                                            </h4>
+                                        </a>
+                                        <div class="storydetails">
+                                            <dl class="dl-horizontal">
+                                                <dt>Status</dt>
+                                                <dd>{{task.status}}</dd>
+<!--                                                 <dt>Author</dt>
+                                                <dd>{{task.author}}</dd>
+ -->                                                <dt>Assigned</dt>
+                                                <dd>{{task.assigned_to}}</dd>
+<!--                                                 <dt>Type</dt>
+                                                <dd>{{task.type}}</dd>
+ -->                                                <dt>Version</dt>
+                                                <dd>{{task.fixed_version}}</dd>
+
+                                                <dt>Estimated</dt>
+                                                <dd>{{task.estimated_hours}}</dd>
+                                            </dl>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </td>
+                        </tr>
+
+                    </table>
+
+                    <div id="legend">
+                        <div>Legend:</div>
+                        <div class="legend astory">story</div>
+                        <div class="legend astorysolved">story solved</div>
+                        <div class="legend backlog">backlog</div>
+                        <div class="legend weekly">weekly</div>
+                        <div class="legend in-progress">in progress</div>
+                        <div class="legend qa">qa</div>
+                        <div class="legend done">done</div>
+
+                    </div>
+
+
+                </div>
+
+            </div><!-- map end -->
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+            <div id="board" ng-switch-when="board">
+
+                    <h2>Board</h2>
+
+                        <table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
+
+                            <thead>
+
+                            <tr>
+                                <th width="8%">user</th>
+                                <th width="23%">weekly</th>
+                                <th width="23%">in progress</th>
+                                <th width="23%">qa</th>
+                                <th width="23%">done</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+
+                            <tr>
+
+                                <td>
+                                    MR
+                                </td>
+                                <td class="bin f1" id="f1-mr" field="f1" user="mr" on-drop="onDropEvent" droppable="">
+                                    <div class="spacer"></div>
+
+                                        <div title="#3650" class="item ticket weekly" id="3650" data-qa="xy" draggable="">
+                                            <div class="t-info"><i class="fa fa-info-circle"></i></div>
+                                            <div class="t-title">test 1</div>
+
+                                            <div class="t-holder"><i class="fa fa-user"></i> MR</div>
+                                            <div class="t-qa" title="QA by XY"><i class="fa fa-thumbs-up"></i> XY</div>
+                                        </div>
+
+                                        <div title="#3651" class="item ticket weekly" id="3651" data-qa="xy" draggable="">
+                                            <div class="t-info"><i class="fa fa-info-circle"></i></div>
+                                            <div class="t-title">test 2</div>
+                                        </div>
+
+
+                                        <div title="#3653" class="item ticket weekly" id="3650" data-qa="xy" draggable="">
+                                            <div class="t-info"><i class="fa fa-info-circle"></i></div>
+                                            <div class="t-title">test 3</div>
+
+                                            <div class="t-holder"><i class="fa fa-user"></i> MR</div>
+                                            <div class="t-qa" title="QA by XY"><i class="fa fa-thumbs-up"></i> XY</div>
+                                        </div>
+
+                                        <div title="#3654" class="item ticket weekly" id="3651" data-qa="xy" draggable="">
+                                            <div class="t-info"><i class="fa fa-info-circle"></i></div>
+                                            <div class="t-title">test 4</div>
+                                        </div>
+
+                                </td>
+                                <td class="bin f2" id="f2-mr" field="f2" user="mr" on-drop="onDropEvent" droppable="">
+                                </td>
+                                <td class="bin f3" id="f3-mr" field="f3" user="mr" on-drop="onDropEvent" droppable="">
+                                </td>
+                                <td class="bin f4" id="f4-mr" field="f4" user="mr" on-drop="onDropEvent" droppable="">
+                                </td>
+
+                            </tr>
+
+                            <tr>
+                                <td>
+                                    XY
+                                </td>
+                                <td class="bin f1" id="f1-xy" field="f1" user="xy" on-drop="onDropEvent" droppable="">
+                                    <div class="spacer"></div>
+                                </td>
+                                <td class="bin f2" id="f2-xy" field="f2" user="xy" on-drop="onDropEvent" droppable="">
+                                </td>
+                                <td class="bin f3" id="f3-xy" field="f3" user="xy" on-drop="onDropEvent" droppable="">
+                                </td>
+                                <td class="bin f4" id="f4-xy" field="f4" user="xy" on-drop="onDropEvent" droppable="">
+                                </td>
+
+
+
+                            </tr>
+                            </tbody>
+                        </table>
+
+                        <pre>
+                        ticket: {{drag_and_dropped}} into dropzone: {{target_id}}
+
+                        ticket user: {{user}}
+                        task field: {{dropped_field}}
+
+                        qa-user: {{qa_user}}
+                        </pre>
+
+
+            </div><!-- board end -->
+
+
+
+
+
+
+
+
+
+
+            <div ng-switch-default="">
+                Hello
+            </div>
+
+
+
+        </div>
+
+        <div class="clearfix"></div>
+
+        <footer>
+            based on: http://blog.parkji.co.uk/2013/08/11/native-drag-and-drop-in-angularjs.html
+            and http://alxhill.com/blog/articles/angular-coffeescript/
+        </footer>
+
+        <!-- angular app -->
+        <script src="/static/js/myapp.js"></script>
+
+    </body>
+</html>

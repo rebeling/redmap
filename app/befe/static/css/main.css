@@ -1,0 +1,52 @@
+#theloader{position:fixed;z-index:3000;width:940px;height:260px;background:url("../img/loader-gray-trans.gif") no-repeat center;top:113px;opacity:.6}
+.bin{padding:0;margin:0}
+.bin div.spacer{height:82px;width:0;float:left}
+.table tbody > tr > td,.table tfoot > tr > td{padding:5px;margin:0}
+.over{background:#f00}
+.mainmenu{padding:13px 13px 13px 13px}
+.storyeditbuttons{margin-top:3px;padding-right:3px}
+.popover.right .arrow{top:12%;margin-top:0}
+.popover.right{margin-left:10px;margin-top:18px}
+.poping{color:#fff;float:right;margin-top:0;margin-right:2px;font-size:18px;}
+.poping i{opacity:.2}
+.done{background:#8e44ad}
+.weekly{background:#2ecc71}
+.in-progress{background:#f1c40f}
+.qa{background:#e74c3c}
+.backlog,.new{background:#27ae60}
+.feedback{background:#f1c40f;border:solid 13px #27ae60}
+.story,.astory,.astorysolved{background:#3498db;}
+.story.done,.astory.done,.astorysolved.done{background:#2980b9}
+.support{background:#cba162}
+.refused{background:#ecf0f1}
+.different{background:#95a5a6}
+#storymap .table{width:auto}
+#storymap h4{color:#333;margin-left:6px;margin-right:16px;line-height:21px;margin-top:6px;margin-bottom:6px}
+#storymap .story{min-width:223px;max-width:223px;cursor:pointer;width:100%;}
+#storymap .story div.innerstory{padding:2px 4px 6px 8px}
+#storymap .highlight{background:#bdc3c7}
+#storymap .ticket,#storymap .task{min-width:223px;max-width:223px;cursor:pointer;width:98%;margin:4px 4px 12px 3px;}
+#storymap .ticket .blocked,#storymap .task .blocked{float:right;margin-top:0;margin-right:2px}
+#storymap .ticket div,#storymap .task div{padding:2px 4px 6px 8px}
+#storymap .overallprogress{padding:0 !important;background:rgba(75,75,75,0.4);height:4px}
+#storymap .storydetails{font-size:12px;width:88%;}
+#storymap .storydetails .dl-horizontal dt{width:58px;font-weight:normal}
+#storymap .storydetails .dl-horizontal dd{margin-left:66px;font-weight:normal}
+#storymap .storydetails dl{margin-bottom:0}
+#storymap #legend{float:right;margin:13px 55px 0 0;}
+#storymap #legend div{float:left;font-size:12px;padding:2px 0 2px 6px}
+#storymap #legend .legend{margin:0 0 0 4px;padding:2px 6px 2px 6px}
+#storymap .sprintbuttons{float:right;margin-right:55px}
+#board .ticket,#board .task{margin:5px;padding:7px;width:46%;float:left;min-height:72px}
+#board .f4 .ticket{opacity:.5}
+#board .t-info{margin:-7px -4px 0 0;text-align:right;color:#fff;opacity:.4;font-size:13px}
+#board .t-title{font-weight:bold;font-family:helvetica;margin:-8px 0 8px 0;font-size:13px;line-height:16px}
+#board .t-holder{float:left;margin:0 8px 0 0;font-size:11px}
+#board .t-qa{font-size:11px}
+#board #item1{background:#008000}
+#board #item2{background:#00f}
+#board #bin1{background:#800080}
+#board #bin2{background:#ff0}
+#board #bin3{background:#ddd}
+#board #bin4{background:#808080}
+footer{margin:42px 13px 13px 13px;border-top:solid 1px #ddd;font-family:helvetica;padding-top:8px;text-align:center;font-size:12px;color:#aaa}
