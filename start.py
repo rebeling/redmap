@@ -12,8 +12,8 @@ def main():
     log.info("args: %s" % cl_args)
 
     if 'red' in cl_args:
-        from application.redmine import process_project
-        process_project(red)
+        from application.redmine.get_content import analize_project
+        analize_project(red)
 
     if 'api' in cl_args:
         from application.api import app
