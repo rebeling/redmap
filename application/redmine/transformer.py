@@ -115,17 +115,20 @@ def restructure_data(data, project, project_url):
                 parent_id = t['parent']
                 if parent_id == None:
                     parent_id = 'no_parent_%s' % key
+                    no_parent[key] = True
 
+                no_position_yet = True
                 if updater and 'task' in updater:
                     if parent_id in updater['task']:
                         this = updater['task'][parent_id].get(item['id'], None)
                         if this:
                             t['position'] = this['position']
                             t['status'] = this['status']
-                    else:
-                        # initially set based on len of processed tasks
-                        p = len(processed_items["task"].get(parent_id, [])) + 1
-                        t['position'] = p
+                            no_position_yet = False
+
+                if no_position_yet:
+                    p = len(processed_items["task"].get(parent_id, [])) + 1
+                    t['position'] = p
 
                 tasks_4_storyX = processed_items["task"].get(parent_id, [])
                 tasks_4_storyX.append(t)
@@ -164,19 +167,16 @@ def story_dummies_for_orphans(items, no_parent):
                     'subject': 'All tasks without a story'}
     }
 
-    i = len(items['story'])
     for key, value in no_parent.iteritems():
-
         if value:
-            i += 1
             no_parent_item = {
                 'id': dummies[key]['id'],
                 'subject': dummies[key]['subject'],
                 'status': {'name': 'unknown'},
-                'position': i
+                'type': 'story'
             }
-            s = Story(no_parent_item)
-            items['story'].append(s.item)
+            s = create_item(no_parent_item)
+            items['story'].append(s)
 
     return items
 
