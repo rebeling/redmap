@@ -2,7 +2,7 @@
 # encoding: utf-8
 import requests
 import logging as log
-from application.utils import red
+from app.utils import red
 
 
 def request_redmine_api(url):

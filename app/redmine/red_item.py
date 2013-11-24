@@ -2,7 +2,7 @@
 # encoding: utf-8
 
 # import unittest
-from application.redmine.red_translation import red_t_
+from app.redmine.red_translation import red_t_
 import logging as log
 
 

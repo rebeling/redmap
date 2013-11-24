@@ -1,13 +1,13 @@
 #!/usr/bin/env python
 # encoding: utf-8
 import json
-from application.utils import order_by_key
+from app.utils import order_by_key
 import logging as log
 
 
 def access_content(task='r', content=None):
 
-    with open('application/data/content.json', task) as f:
+    with open('app/data/content.json', task) as f:
 
         if task == 'r':
             content = json.loads(f.read())

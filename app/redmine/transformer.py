@@ -1,12 +1,12 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from application.redmine.red_translation import red_t_
-from application.redmine.red_requests import get_issue_details
-from application.redmine.red_item import create_item # Story, Task
-from application.utils import order_by_key
+from app.redmine.red_translation import red_t_
+from app.redmine.red_requests import get_issue_details
+from app.redmine.red_item import create_item # Story, Task
+from app.utils import order_by_key
+from app.utils import timing
 import logging as log
 import json
-from application.utils import timing
 import time
 
 
@@ -54,13 +54,13 @@ def restructure_data(data, project, project_url):
         with open('application/data/content.json', 'r') as f:
             buffer = json.loads(f.read())
             updater['story'] = {
-                x['id']:{'postion': x['position'], 'status': x['status']}
+                x['id']:{'position': x['position'], 'status': x['status']}
                 for x in buffer['story']}
 
             updater['task'] = {}
             for key, tasks in buffer['task'].iteritems():
                 updater['task'][key] = {
-                    x['id']:{'postion': x['position'], 'status': x['status']}
+                    x['id']:{'position': x['position'], 'status': x['status']}
                     for x in tasks}
 
     except Exception, e:
@@ -91,9 +91,9 @@ def restructure_data(data, project, project_url):
                 s = create_item(item)
                 # s = Story(item)
 
-                if updater and 'story' in updater:
+                if updater and updater.has_key('story'):
                     # update with data from last time
-                    this = updater['story'].get(item['id'], None)
+                    this = updater['story'].get(s['id'], None)
                     if this:
                         s['position'] = this['position']
                         s['status'] = this['status']
@@ -119,11 +119,12 @@ def restructure_data(data, project, project_url):
 
                 no_position_yet = True
                 if updater and 'task' in updater:
-                    if parent_id in updater['task']:
-                        this = updater['task'][parent_id].get(item['id'], None)
+
+                    if updater['task'].has_key(parent_id):
+                        this = updater['task'][parent_id].get(t['id'], None)
                         if this:
                             t['position'] = this['position']
-                            t['status'] = this['status']
+                            s['status'] = this['status']
                             no_position_yet = False
 
                 if no_position_yet:
