@@ -1,9 +1,11 @@
 #!/usr/bin/env python
 # encoding: utf-8
-from application.utils import red
+import sys
+import os
 import logging.config
 import logging as log
-import sys
+from app.befe import app
+from app.redmine.get_content import analize_project
 
 
 def main():
@@ -12,13 +14,11 @@ def main():
     log.info("args: %s" % cl_args)
 
     if 'red' in cl_args:
-        from application.redmine.get_content import analize_project
-        analize_project(red)
+        analize_project()
 
-    if 'api' in cl_args:
-        from application.api import app
-        app.run(debug=True)
-
+    if 'app' in cl_args:
+        port = int(os.environ.get('PORT', 5000))
+        app.run(host='0.0.0.0', port=port, debug=True)
 
 if __name__ == '__main__':
     main()
