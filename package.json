@@ -1,0 +1,22 @@
+{
+  "name": "schmite",
+  "version": "0.0.1",
+  "description": "agile redmine project overview",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": "https://github.com/rebeling/redmap",
+  "author": "Matthias Rebel",
+  "license": "MIT",
+  "dependencies": {
+    "grunt": "~0.4.0",
+    "grunt-contrib-coffee": "*",
+    "grunt-contrib-watch": "*"
+  },
+  "devDependencies": {
+    "grunt-contrib-stylus": "~0.10.0",
+    "grunt-contrib-htmlmin": "~0.1.3",
+    "grunt-contrib-watch": "~0.5.3",
+    "grunt-contrib-coffee": "~0.7.0"
+  }
+}
