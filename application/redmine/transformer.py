@@ -173,7 +173,8 @@ def story_dummies_for_orphans(items, no_parent):
                 'id': dummies[key]['id'],
                 'subject': dummies[key]['subject'],
                 'status': {'name': 'unknown'},
-                'type': 'story'
+                'type': 'story',
+                'position': len(items['story']) + 1
             }
             s = create_item(no_parent_item)
             items['story'].append(s)
