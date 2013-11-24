@@ -9,9 +9,8 @@ Todo
 - get spent_hours and transfer all calculations from frontend
     to the backend ...no need to do this in frontend
 - add loader
-- add the frontend in here
 - button to get data from updated redmine
-
+- write install instructions
 
 
 Configuration
@@ -54,3 +53,25 @@ Used libraries
 - ConfigParser - standard lib in 2
 - Requests: HTTP for Humans - http://www.python-requests.org
 - Flask - http://flask.pocoo.org/
+- Angularjs
+- Grunt
+
+
+Installations
+---------------
+Uses coffee, angularjs, stylus and compiles via Grunt:
+this needs to be installed locally or global
+
+    npm install
+    npm install grunt-contrib-coffee --save-dev
+    npm install grunt-contrib-stylus --save-dev
+    npm install grunt-contrib-htmlmin --save-dev
+    npm install grunt-contrib-watch --save-dev
+
+
+To build, run `grunt`.
+
+To watch, run `grunt watch`.
+
+
+...more instructions will follow
