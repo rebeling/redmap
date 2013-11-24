@@ -38,3 +38,5 @@ nosetests.xml
 cfg/secret.cfg
 log
 data
+
+node_modules
