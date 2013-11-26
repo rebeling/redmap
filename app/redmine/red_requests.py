@@ -9,7 +9,7 @@ def request_redmine_api(url):
     """
     get data from redmine api
     """
-    r = requests.get(url, auth=(red.user, red.pw))
+    r = requests.get(url) #, auth=(red.user, red.pw))
     if r.status_code == 200:
         return True, r.json()
     else:
@@ -18,14 +18,16 @@ def request_redmine_api(url):
 
 
 def get_project_data():
-    url = "%s/projects/%s/issues.json?limit=%s&status_id=*" % (
-        red.url, red.project, red.limit)
+    url = "%s/projects/%s/issues.json?limit=%s&status_id=*&key=%s" % (
+        red.url, red.project, red.limit, red.key)
     return request_redmine_api(url)
 
 
 def get_issue_details(an_id):
-    url = "%s/issues/%s.json" % (red.url, an_id)
+    url = "%s/issues/%s.json?key=%s" % (red.url, an_id, red.key)
     success, details = request_redmine_api(url)
     if success:
         details = {k: details.get(k, None) for k in ['done_ratio', 'spent_hours']}
+    else:
+        details = {}
     return success, details
