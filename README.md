@@ -9,10 +9,7 @@ Todo
 - get spent_hours and transfer all calculations from frontend
     to the backend ...no need to do this in frontend
 - get done ratio of task
-- add loader
-- button to get data from updated redmine
 - write install instructions
-- save order
 
 
 Configuration
