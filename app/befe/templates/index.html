@@ -6,7 +6,6 @@
         <script src="/static/lib/angular.min.js"></script>
         <script src="/static/lib/ui-bootstrap-0.6.0.min.js"></script>
         <script src="/static/lib/ui-bootstrap-0.6.0-tpls.js"></script>
-
         <title>Schmite</title>
         <meta name="viewport" content="width=device-width">
         <link rel="stylesheet" href="/static/css/bootstrap.min.css">
@@ -19,23 +18,12 @@
 
         <div class="mainmenu">
             <ul class="nav nav-tabs">
-
-              <li ng-class="{true:'active', false:''}[menupoint=='welcome']">
-                <a ng-click="menupoint='welcome'">
-                    welcome
-                </a>
-              </li>
-              <li ng-class="{true:'active', false:''}[menupoint=='map']">
-                <a ng-click="menupoint='map'">
-                    map
-                </a>
-              </li>
-              <li ng-class="{true:'active', false:''}[menupoint=='board']">
-                <a ng-click="menupoint='board'">
-                    board
-                </a>
-              </li>
-
+                <li ng-class="{true:'active', false:''}[menupoint=='map']">
+                    <a ng-click="menupoint='map'">project map</a>
+                </li>
+<!--               <li ng-class="{true:'active', false:''}[menupoint=='board']">
+                    <a ng-click="menupoint='board'">board</a>
+              </li> -->
             </ul>
         </div>
 
@@ -64,8 +52,8 @@
                         <button class="btn btn-xs">sprint 5</button>
                         <button class="btn btn-xs" ng-click="update_stories()">update</button>
                     </div>
-
-                    <h2>Scrum map</h2>
+                    <br>
+                    <br>
 
                     <table class="table table-bordered" border="0" cellspacing="0" cellpadding="0">
 
