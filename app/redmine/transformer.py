@@ -51,7 +51,7 @@ def restructure_data(data, project, project_url):
     # get data from last time to update position and status
     updater = {}
     try:
-        with open('application/data/content.json', 'r') as f:
+        with open('app/data/content.json', 'r') as f:
             buffer = json.loads(f.read())
             updater['story'] = {
                 x['id']:{'position': x['position'], 'status': x['status']}
