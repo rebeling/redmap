@@ -8,9 +8,11 @@ Todo
 -----
 - get spent_hours and transfer all calculations from frontend
     to the backend ...no need to do this in frontend
+- get done ratio of task
 - add loader
 - button to get data from updated redmine
 - write install instructions
+- save order
 
 
 Configuration
@@ -42,7 +44,7 @@ easy:
 Data Storage
 ---------------------
 At the moment, the data s stored as json in files. In future it would be nice
-to use a datastorage - wished it will be redis - to augment the datastructure.
+to use a datastorage - wish it will be pouchdb - to augment the datastructure.
 Due to the lack of functionality at your current tool, you can extend the data
 somehow and needs to be updated ...if needed and so on.
 
