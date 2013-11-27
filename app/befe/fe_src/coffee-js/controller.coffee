@@ -1,4 +1,4 @@
-app.controller 'ScrummapCtrl', ($scope, DataExchange) ->
+app.controller 'ScrummapCtrl', ($scope, $window, DataExchange) ->
     console.log 'ScrummapCtrl'
 
     $scope.editmode = false
@@ -14,6 +14,7 @@ app.controller 'ScrummapCtrl', ($scope, DataExchange) ->
                 (response) ->
                     console.log response
                     $scope.showloader = false
+                    $window.location.reload()
                 (data) ->
                     console.log 'error'
             )

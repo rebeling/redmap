@@ -8,7 +8,7 @@
 
   app = angular.module(app_name, ['ui.bootstrap']);
 
-  app.controller('ScrummapCtrl', function($scope, DataExchange) {
+  app.controller('ScrummapCtrl', function($scope, $window, DataExchange) {
     var set_the_stories_obj, storyObj, _blockedbysth, _calc_progress, _estimations;
     console.log('ScrummapCtrl');
     $scope.editmode = false;
@@ -16,7 +16,8 @@
       $scope.showloader = true;
       return DataExchange.get_updated_data_from_redmine().then(function(response) {
         console.log(response);
-        return $scope.showloader = false;
+        $scope.showloader = false;
+        return $window.location.reload();
       }, function(data) {
         return console.log('error');
       });
