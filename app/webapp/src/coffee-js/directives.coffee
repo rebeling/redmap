@@ -1,4 +1,37 @@
 
+app.directive 'sprintSelector', () ->
+    restrict: 'E'
+    replace: true
+
+    link: (scope, elem, attr) ->
+        scope.ttf_key = attr.key
+        scope.ttf_value = attr.initialvalue
+        scope.ttf_values = [1, 2, 3, 4, 5, 6]
+
+        if scope.ttf_values.indexOf scope.ttf_value is -1
+            scope.ttf_values.unshift scope.ttf_value
+
+        # scope.settype = (thisvalue) ->
+        #     scope.ttf_value = thisvalue
+        #     if scope.ttf_entry
+        #         scope.ttf_entry[scope.ttf_key] = thisvalue
+        #     else
+        #         # add as filter to state params
+        #         scope.$parent.$state.params[scope.ttf_key] = thisvalue
+
+    template: '<div class="btn-group">' +
+                  '<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                    'sprint {{ttf_value}} <span class="caret"></span>' +
+                  '</button>' +
+                '<ul class="dropdown-menu" role="menu">' +
+                    '<li class="{{entity}}" ng-repeat="entity in ttf_values">' +
+                        '<a ng-click="settype(\'{{entity}}\')">sprint {{entity}}</a>' +
+                    '</li>' +
+                '</ul>' +
+              '</div>'
+
+
+
 app.directive 'sorter', ->
     restrict: 'E'
     template: '<span class="sorter"><i class="icon-sort-down"></i>' +

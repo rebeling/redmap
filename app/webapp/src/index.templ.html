@@ -133,6 +133,9 @@
                                                 {{task.subject}}
                                             </h4>
                                         </a>
+
+
+
                                         <div class="storydetails">
                                             <dl class="dl-horizontal">
                                                 <dt>Status</dt>
@@ -144,7 +147,10 @@
 <!--                                                 <dt>Type</dt>
                                                 <dd>{{task.type}}</dd>
  -->                                                <dt>Version</dt>
-                                                <dd>{{task.fixed_version}}</dd>
+                                                <dd>
+                                                    <b ng-hide="editmode">{{task.fixed_version}}</b>
+                                                    <sprint-selector ng-show="editmode" initialvalue="{{task.fixed_version}}" key="type">
+                                                </dd>
 
                                                 <dt>Estimated</dt>
                                                 <dd>{{task.estimated_hours}}</dd>

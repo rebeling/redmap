@@ -4,7 +4,7 @@ import sys
 import os
 import logging.config
 import logging as log
-from app.befe import app
+from app.webapp import app
 from app.redmine.get_content import analize_project
 
 

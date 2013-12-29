@@ -19,7 +19,7 @@ def index(**kwargs):
     # # files will be cached
     # return send_file('templates/index.html')
     # developement - file will not b cached
-    return make_response(open('app/befe/templates/index.html').read())
+    return make_response(open('app/webapp/templates/index.html').read())
 
 
 @app.route('/favicon.ico')
@@ -47,7 +47,7 @@ def get_redmine_content():
 
 @app.route("/update/order/<type_of>/<storyid>/<taskid>/<direction>")
 def update_order(type_of, storyid, taskid, direction):
-    from app.befe.processing import update
+    from app.webapp.processing import update
     updated_json = update(type_of, storyid, taskid, direction)
     return updated_json
 
