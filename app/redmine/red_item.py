@@ -10,7 +10,7 @@ def create_item(arg):
 
     # 'created_on',
     keys = ['id', 'type', 'subject', 'description', 'author', 'status',
-            'position', 'sprint', 'fixed_version', 'assigned_to',
+            'position', 'fixed_version', 'assigned_to',
             'estimated_hours', 'parent']
 
     item = {}
@@ -31,6 +31,8 @@ def create_item(arg):
             log.debug("e %s" % e)
         item[k] = v
 
+    # initial sprint is backlog
+    item['sprint'] = 'backlog'
     return item
 
 

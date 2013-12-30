@@ -54,13 +54,13 @@ def restructure_data(data, project, project_url):
         with open('app/data/content.json', 'r') as f:
             buffer = json.loads(f.read())
             updater['story'] = {
-                x['id']:{'position': x['position'], 'status': x['status']}
+                x['id']:{'position': x['position'], 'status': x['status'], 'sprint': x['sprint']}
                 for x in buffer['story']}
 
             updater['task'] = {}
             for key, tasks in buffer['task'].iteritems():
                 updater['task'][key] = {
-                    x['id']:{'position': x['position'], 'status': x['status']}
+                    x['id']:{'position': x['position'], 'status': x['status'], 'sprint': x['sprint']}
                     for x in tasks}
 
     except Exception, e:
@@ -97,6 +97,7 @@ def restructure_data(data, project, project_url):
                     if this:
                         s['position'] = this['position']
                         s['status'] = this['status']
+                        s['sprint'] = this['sprint']
 
                 processed_items["story"].append(s)
 
@@ -125,6 +126,7 @@ def restructure_data(data, project, project_url):
                         if this:
                             t['position'] = this['position']
                             s['status'] = this['status']
+                            s['sprint'] = this['sprint']
                             no_position_yet = False
 
                 if no_position_yet:
