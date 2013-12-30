@@ -14,7 +14,18 @@ app.factory 'DataExchange', ($http, $rootScope) ->
             )
 
 
+    _update_sprint: (storyid, taskid, sprint, type_of) ->
 
+        params = [storyid, taskid, sprint, type_of].join('/')
+        $http.get('http://localhost:5000/update/sprint/' + params)
+            .success(
+                (data, status, headers, config) ->
+                    # console.log "success:", data, status, headers, config
+            )
+            .error(
+                (data, status, headers, config) ->
+                    # console.log "error:", data, status, headers, config
+            )
 
 
     _reorder_story_item: (type, storyid, storyid2, direction) ->

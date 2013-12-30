@@ -20,12 +20,12 @@ app.directive 'sprintSelector', () ->
         #         scope.$parent.$state.params[scope.ttf_key] = thisvalue
 
     template: '<div class="btn-group">' +
-                  '<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' +
-                    'sprint {{ttf_value}} <span class="caret"></span>' +
+                  '<button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown">' +
+                    '{{ttf_value}} <span class="caret"></span>' +
                   '</button>' +
                 '<ul class="dropdown-menu" role="menu">' +
                     '<li class="{{entity}}" ng-repeat="entity in ttf_values">' +
-                        '<a ng-click="settype(\'{{entity}}\')">sprint {{entity}}</a>' +
+                        '<a ng-click="settype(\'{{entity}}\')">{{entity}}</a>' +
                     '</li>' +
                 '</ul>' +
               '</div>'

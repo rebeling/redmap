@@ -174,7 +174,7 @@
           return scope.ttf_values.unshift(scope.ttf_value);
         }
       },
-      template: '<div class="btn-group">' + '<button type="button" class="btn btn-default btn-xs dropdown-toggle" data-toggle="dropdown">' + 'sprint {{ttf_value}} <span class="caret"></span>' + '</button>' + '<ul class="dropdown-menu" role="menu">' + '<li class="{{entity}}" ng-repeat="entity in ttf_values">' + '<a ng-click="settype(\'{{entity}}\')">sprint {{entity}}</a>' + '</li>' + '</ul>' + '</div>'
+      template: '<div class="btn-group">' + '<button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown">' + '{{ttf_value}} <span class="caret"></span>' + '</button>' + '<ul class="dropdown-menu" role="menu">' + '<li class="{{entity}}" ng-repeat="entity in ttf_values">' + '<a ng-click="settype(\'{{entity}}\')">{{entity}}</a>' + '</li>' + '</ul>' + '</div>'
     };
   });
 
@@ -265,6 +265,11 @@
     return {
       get_updated_data_from_redmine: function() {
         return $http.get('http://localhost:5000/content/update_from_redmine_data').success(function(data, status, headers, config) {}).error(function(data, status, headers, config) {});
+      },
+      _update_sprint: function(storyid, taskid, sprint, type_of) {
+        var params;
+        params = [storyid, taskid, sprint, type_of].join('/');
+        return $http.get('http://localhost:5000/update/sprint/' + params).success(function(data, status, headers, config) {}).error(function(data, status, headers, config) {});
       },
       _reorder_story_item: function(type, storyid, storyid2, direction) {
         var params;
