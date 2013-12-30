@@ -69,3 +69,28 @@ def update(type_of, storyid, taskid, direction):
         access_content(task='w', content=content)
 
     return json.dumps(content)
+
+
+
+
+
+def update_sprint(storyid, taskid, sprint, type_of):
+    """
+    update the target sprint for this task
+    if storyid is not None update the story for the sprint
+
+    """
+    content = access_content(task='r')
+
+    if type_of == 'story':
+        thiscontent = content['story']
+    else:
+        thiscontent = content['task'][storyid]
+
+    for item in thiscontent:
+        if item['id'] == taskid:
+            log.debug("change sprint target for id %s" % taskid)
+            item['sprint'] = sprint
+            break
+    access_content(task='w', content=content)
+    return json.dumps(content)

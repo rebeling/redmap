@@ -51,6 +51,12 @@ def update_order(type_of, storyid, taskid, direction):
     updated_json = update(type_of, storyid, taskid, direction)
     return updated_json
 
+@app.route("/update/sprint/<storyid>/<taskid>/<sprint>/<type_of>")
+def update_sprint(storyid, taskid, sprint, type_of):
+    from app.webapp.processing import update_sprint
+    updated_json = update_sprint(storyid, taskid, sprint, type_of)
+    return updated_json
+
 
 if __name__ == "__main__":
     app.run()
