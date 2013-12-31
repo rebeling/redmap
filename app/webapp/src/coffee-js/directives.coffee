@@ -1,23 +1,33 @@
 
-app.directive 'sprintSelector', () ->
+ # ['$compile', 'myData', function($compile, myData){
+
+app.directive 'sprintSelector', (DataExchange) ->
     restrict: 'E'
     replace: true
 
     link: (scope, elem, attr) ->
         scope.ttf_key = attr.key
         scope.ttf_value = attr.initialvalue
-        scope.ttf_values = [1, 2, 3, 4, 5, 6]
+        scope.ttf_values = ['kw01', 'kw02', 'kw03', 'kw04', 'kw05', 'kw06', 'future']
+        scope.item = attr.item
+        scope.type_of = attr.itemtype
 
-        if scope.ttf_values.indexOf scope.ttf_value is -1
-            scope.ttf_values.unshift scope.ttf_value
+        scope.settype = (item, sprint, type_of) ->
 
-        # scope.settype = (thisvalue) ->
-        #     scope.ttf_value = thisvalue
-        #     if scope.ttf_entry
-        #         scope.ttf_entry[scope.ttf_key] = thisvalue
-        #     else
-        #         # add as filter to state params
-        #         scope.$parent.$state.params[scope.ttf_key] = thisvalue
+            if type_of is 'task'
+                storyid = item.parent
+                taskid = item.id
+            else
+                storyid = item.id
+                taskid = 'None'
+
+            DataExchange._update_sprint(storyid, taskid, sprint, type_of).then(
+                (response) ->
+                    console.log "response:", response
+                    scope.ttf_value = sprint
+                (data) ->
+                    console.log "data:", data
+                )
 
     template: '<div class="btn-group">' +
                   '<button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown">' +
@@ -25,7 +35,7 @@ app.directive 'sprintSelector', () ->
                   '</button>' +
                 '<ul class="dropdown-menu" role="menu">' +
                     '<li class="{{entity}}" ng-repeat="entity in ttf_values">' +
-                        '<a ng-click="settype(\'{{entity}}\')">{{entity}}</a>' +
+                        '<a ng-click="settype({{item}}, \'{{entity}}\', type_of)">{{entity}}</a>' +
                     '</li>' +
                 '</ul>' +
               '</div>'

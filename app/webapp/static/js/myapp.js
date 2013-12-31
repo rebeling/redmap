@@ -162,19 +162,34 @@
     };
   });
 
-  app.directive('sprintSelector', function() {
+  app.directive('sprintSelector', function(DataExchange) {
     return {
       restrict: 'E',
       replace: true,
       link: function(scope, elem, attr) {
         scope.ttf_key = attr.key;
         scope.ttf_value = attr.initialvalue;
-        scope.ttf_values = [1, 2, 3, 4, 5, 6];
-        if (scope.ttf_values.indexOf(scope.ttf_value === -1)) {
-          return scope.ttf_values.unshift(scope.ttf_value);
-        }
+        scope.ttf_values = ['kw01', 'kw02', 'kw03', 'kw04', 'kw05', 'kw06', 'future'];
+        scope.item = attr.item;
+        scope.type_of = attr.itemtype;
+        return scope.settype = function(item, sprint, type_of) {
+          var storyid, taskid;
+          if (type_of === 'task') {
+            storyid = item.parent;
+            taskid = item.id;
+          } else {
+            storyid = item.id;
+            taskid = 'None';
+          }
+          return DataExchange._update_sprint(storyid, taskid, sprint, type_of).then(function(response) {
+            console.log("response:", response);
+            return scope.ttf_value = sprint;
+          }, function(data) {
+            return console.log("data:", data);
+          });
+        };
       },
-      template: '<div class="btn-group">' + '<button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown">' + '{{ttf_value}} <span class="caret"></span>' + '</button>' + '<ul class="dropdown-menu" role="menu">' + '<li class="{{entity}}" ng-repeat="entity in ttf_values">' + '<a ng-click="settype(\'{{entity}}\')">{{entity}}</a>' + '</li>' + '</ul>' + '</div>'
+      template: '<div class="btn-group">' + '<button type="button" class="btn btn-xs dropdown-toggle" data-toggle="dropdown">' + '{{ttf_value}} <span class="caret"></span>' + '</button>' + '<ul class="dropdown-menu" role="menu">' + '<li class="{{entity}}" ng-repeat="entity in ttf_values">' + '<a ng-click="settype({{item}}, \'{{entity}}\', type_of)">{{entity}}</a>' + '</li>' + '</ul>' + '</div>'
     };
   });
 

@@ -83,14 +83,17 @@ def update_sprint(storyid, taskid, sprint, type_of):
     content = access_content(task='r')
 
     if type_of == 'story':
-        thiscontent = content['story']
+        for item in content['story']:
+            if item['id'] == storyid:
+                log.debug("change sprint target for id %s" % storyid)
+                item['sprint'] = sprint
+                break
     else:
-        thiscontent = content['task'][storyid]
+        for item in content['task'][storyid]:
+            if item['id'] == taskid:
+                log.debug("change sprint target for id %s" % taskid)
+                item['sprint'] = sprint
+                break
 
-    for item in thiscontent:
-        if item['id'] == taskid:
-            log.debug("change sprint target for id %s" % taskid)
-            item['sprint'] = sprint
-            break
     access_content(task='w', content=content)
     return json.dumps(content)

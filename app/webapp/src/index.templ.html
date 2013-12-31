@@ -149,7 +149,7 @@
  -->                                                <dt>Version</dt>
                                                 <dd>
                                                     <b ng-hide="editmode">{{task.sprint}}</b>
-                                                    <sprint-selector ng-show="editmode" initialvalue="{{task.sprint}}" key="type">
+                                                    <sprint-selector item="{{task}}" itemtype="task" ng-show="editmode" initialvalue="{{task.sprint}}" key="type">
                                                 </dd>
 
                                                 <dt>Estimated</dt>
