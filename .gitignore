@@ -40,3 +40,6 @@ log
 data
 
 node_modules
+app/webapp/static/css/main.css
+app/webapp/static/js/myapp.js
+app/webapp/templates/*.html
