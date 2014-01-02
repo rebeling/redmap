@@ -16,10 +16,15 @@
 
     <body ng-controller="IndexCtrl">
 
+        <button class="btn btn-s sprintprint" ng-click="menupoint='sprintprint'"><i class="fa fa-print"></i></button>
+
         <div class="mainmenu">
             <ul class="nav nav-tabs">
                 <li ng-class="{true:'active', false:''}[menupoint=='map']">
-                    <a ng-click="menupoint='map'">project map</a>
+                    <a ng-click="menupoint='map'">
+                        project map
+                    </a>
+
                 </li>
 <!--               <li ng-class="{true:'active', false:''}[menupoint=='board']">
                     <a ng-click="menupoint='board'">board</a>
@@ -28,30 +33,31 @@
         </div>
 
 
-        <div ng-switch="menupoint">
+        <div ng-switch="menupoint" ng-controller="ScrummapCtrl">
 
             <div ng-switch-when="map">
 
-                <div ng-controller="ScrummapCtrl" id="storymap">
+                <div id="storymap">
 
                     <div ng-show="showloader" id="theloader"></div>
 
 
                     <div class="sprintbuttons">
                         <button class="btn btn-xs" ng-click="redmine_data()">get updated redmine</button>
-
                         <button class="btn btn-xs" ng-click="editmode=!editmode">edit mode {{editmode}}</button>
                     </div>
 
 
+
                     <div class="sprintbuttons">
-                        <button class="btn btn-xs">sprint 1</button>
-                        <button class="btn btn-xs">sprint 2</button>
-                        <button class="btn btn-xs">sprint 3</button>
-                        <button class="btn btn-xs">sprint 4</button>
-                        <button class="btn btn-xs">sprint 5</button>
-                        <button class="btn btn-xs" ng-click="update_stories()">update</button>
+                        <button class="btn btn-xs" ng-click="setsprinttog('kw01')">sprint 1</button>
+                        <button class="btn btn-xs" ng-click="setsprinttog('kw02')">sprint 2</button>
+                        <button class="btn btn-xs" ng-click="setsprinttog('kw03')">sprint 3</button>
+                        <button class="btn btn-xs" ng-click="setsprinttog('kw04')">sprint 4</button>
+                        <button class="btn btn-xs" ng-click="setsprinttog(null)"><i class="fa fa-ban"></i></button>
                     </div>
+
+
                     <br>
                     <br>
 
@@ -108,7 +114,7 @@
 
                         <tr>
                             <td ng-repeat="story in stories">
-                                <div class="task {{task.status}}" ng-repeat="task in story.tasks">
+                                <div ng-class="checkclass(task.sprint)" class="task {{task.status}}" ng-repeat="task in story.tasks">
 
                                     <div class="overallprogress" style="width:{{task.done_ratio}}%"></div>
 
@@ -181,13 +187,30 @@
 
             </div><!-- map end -->
 
+            <div id="board" ng-switch-when="sprintprint">
 
+                <div ng-if="sprinttog!=null">
+                    <div ng-repeat="story in stories">
+                        <div ng-repeat="task in story.tasks" class="tasktoprintmother">
 
+                            <div ng-if="sprinttog == task.sprint" class="tasktoprint">
+                                <div class="taskid">
+                                    #{{task.id}}<br>
+                                    <span>{{task.parent}}</span>
+                                </div>
+                                <div class="project">szon</div>
 
+                                <h1>{{task.subject}}</h1>
+                                <p>{{task.description}}</p>
 
+                                <div class="assigned_to">{{task.assigned_to}}</div>
+                            </div>
 
+                        </div>
+                    </div>
+                </div>
 
-
+            </div>
 
 
 
