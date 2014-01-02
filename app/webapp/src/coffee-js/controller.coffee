@@ -3,6 +3,17 @@ app.controller 'ScrummapCtrl', ($scope, $window, DataExchange) ->
 
     $scope.editmode = false
 
+    $scope.sprinttog = null
+    $scope.setsprinttog = (sprint) ->
+        $scope.sprinttog = sprint
+
+    $scope.checkclass = (vali) ->
+        if $scope.sprinttog isnt null && $scope.sprinttog is vali
+            'sprintclass'
+        else if $scope.sprinttog isnt null && $scope.sprinttog isnt vali
+            'sprintclassoff'
+        else
+            'schnup'
 
 # /content/update_from_redmine_data
 
