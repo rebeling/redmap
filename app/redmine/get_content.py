@@ -21,6 +21,9 @@ def analize_project():
     """
     log.info('started')
 
+    from app.redmine.red_requests import get_my_issues
+    print get_my_issues()
+
     success, data_or_msg = get_project_data()
     if success:
         restructured = restructure_data(data_or_msg, red.project,

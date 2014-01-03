@@ -17,9 +17,17 @@ def request_redmine_api(url):
         return False, "no response, code:  %s" % r.status_code
 
 
+def get_my_issues():
+    url = "%s/issues.xml?assigned_to_id=26&key=%s" % (
+        red.url, red.key)
+    print url
+    return request_redmine_api(url)
+
+
 def get_project_data():
     url = "%s/projects/%s/issues.json?limit=%s&status_id=*&key=%s" % (
         red.url, red.project, red.limit, red.key)
+    print url
     return request_redmine_api(url)
 
 
@@ -31,3 +39,4 @@ def get_issue_details(an_id):
     else:
         details = {}
     return success, details
+
