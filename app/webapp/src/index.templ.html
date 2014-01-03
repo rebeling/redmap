@@ -187,7 +187,7 @@
 
             </div><!-- map end -->
 
-            <div id="board" ng-switch-when="sprintprint">
+            <div id="sprintprint" ng-switch-when="sprintprint">
 
                 <div ng-if="sprinttog!=null">
                     <div ng-repeat="story in stories">
@@ -196,14 +196,17 @@
                             <div ng-if="sprinttog == task.sprint" class="tasktoprint">
                                 <div class="taskid">
                                     #{{task.id}}<br>
-                                    <span>{{task.parent}}</span>
                                 </div>
                                 <div class="project">szon</div>
 
                                 <h1>{{task.subject}}</h1>
                                 <p>{{task.description}}</p>
+                                <div class="assigned_to">
+                                    {{task.assigned_to | initialen}} | {{task.estimated_hours}} h
+                                    <br>
+                                    <small>{{task.author}}</small>
+                                </div>
 
-                                <div class="assigned_to">{{task.assigned_to}}</div>
                             </div>
 
                         </div>
