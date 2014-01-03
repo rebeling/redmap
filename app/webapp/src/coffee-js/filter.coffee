@@ -7,3 +7,13 @@ app.filter 'twolines', () ->
             subject.slice(0,40) + ' ...'
         else
             subject
+
+
+app.filter 'initialen', () ->
+    (name) ->
+        # console.log subject.length
+        initialen = ''
+        for x in name.split(' ')
+            initialen += x[0]
+        initialen
+
